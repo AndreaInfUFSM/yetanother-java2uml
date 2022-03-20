@@ -1,105 +1,143 @@
-[![Build Status](https://travis-ci.com/iluwatar/uml-reverse-mapper.svg?branch=master)](https://travis-ci.com/iluwatar/uml-reverse-mapper)
-[![Coverage Status](https://coveralls.io/repos/github/iluwatar/uml-reverse-mapper/badge.svg?branch=master)](https://coveralls.io/github/iluwatar/uml-reverse-mapper?branch=master)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.iluwatar.urm/urm-maven-plugin/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.iluwatar.urm/urm-maven-plugin/)
-[![Join the chat at https://gitter.im/iluwatar/uml-reverse-mapper](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/iluwatar/uml-reverse-mapper?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-# UML Reverse Mapper
+# Yet Another Java to UML (yajauml)
 
-Automatically generate class diagram from your code.
+Existing tools not serving you perfectly well? 
+Here is yet another solution to reverse Java source code into UML class diagrams!
 
-Using reflection, UML Reverse Mapper scans your packages that contain your code. It builds the class relations and can output as a [Graphviz](https://www.graphviz.org/) .dot file, a [PlantUML](http://www.plantuml.com/) .puml file or a [Mermaid](https://mermaid-js.github.io/mermaid/#/)  .mmd file.
+Using the amazing [JavaParser](http://javaparser.org/), **yajauml** scans a folder containing Java source code and parses classes and relationships between them. 
 
-The tool is available in command line version (urm-core) and Maven plugin (urm-maven-plugin).
+As a fork of the inspiring [UML Reverse Mapper](https://github.com/iluwatar/uml-reverse-mapper), **yajauml** outputs an UML class diagram as a [PlantUML](http://www.plantuml.com/) .puml file, a [Graphviz](https://www.graphviz.org/) .dot file, or a [Mermaid](https://mermaid-js.github.io/mermaid/#/) .mmd file. 
 
-### Using from the command-line
+Unlike UML Reverse Mapper, you don't need to build your Java project before generating your class diagram using **yajauml**.
 
-Build the `urm-core` project with `mvn clean package` and grab the generated artifact `urm-core.jar`. Then you need the archive that will be analyzed. In this example we use `abstract-factory.jar` and assume the package name to be `com.iluwatar.abstractfactory`. Place the jar-files in the same directory and execute the following command.
+# Building from sources
 
-    java -cp abstract-factory.jar:urm-core.jar com.iluwatar.urm.DomainMapperCli -p com.iluwatar.abstractfactory -i com.iluwatar.abstractfactory.Castle
 
-This will scan all the classes under the package `com.iluwatar.abstractfactory` except `Castle` that was marked to be ignored and output the markup to your console output. By default PlantUML presenter is used, but it can be changed with switch `-s graphviz` or `-s mermaid`. If you want to write it to file use switch `-f filename`. If you need to scan multiple packages use format `-p "com.package1, com.package2"`. Note that under Windows OS the classpath separator is `;` instead of `:`
+1. Clone the repo:
+   ```
+   git clone https://github.com/AndreaInfUFSM/yetanother-java2uml.git
+   cd yetanother-java2uml
+   ```
 
-### Using the Maven plugin
+2. Use the Gradle wrapper to build the all-in-one `yajauml.jar` file (including runtime dependencies):
+   ```
+   ./gradlew jar
+   ```
 
-Add to your pom.xml the following:
-```xml
-<build>
-  <plugins>
-    <plugin>
-      <groupId>com.iluwatar.urm</groupId>
-      <artifactId>urm-maven-plugin</artifactId>
-      <version>2.0.0</version>
-      <configuration>
-        <!-- if outputDirectory is not set explicitly it will default to your build dir -->
-        <outputDirectory>${project.basedir}/etc</outputDirectory>
-        <packages>
-          <param>com.mycompany.mypackage</param>
-          <param>com.mycompany.other_package</param>
-        </packages>
-        <ignores>
-          <param>com.mycompany.mypackage.MyClass</param>
-          <param>com.mycompany.other_package.OtherClass</param>
-        </ignores>
-        <includeMainDirectory>true</includeMainDirectory>
-        <includeTestDirectory>false</includeTestDirectory>
-        <presenter>graphviz</presenter>
-      </configuration>
-      <executions>
-        <execution>
-          <phase>process-classes</phase>
-          <goals>
-            <goal>map</goal>
-          </goals>
-        </execution>
-      </executions>
-    </plugin>
-  </plugins>
-</build>
+
+# Usage
+
+1. Run `yajauml.jar` over a folder containing Java classes to output a class diagram description in PlantUML (default) format:
+
+   ```
+   java -jar yajauml/build/libs/yajauml.jar -d "yajauml/src/test/java/yajauml/testdomain/abstractfactory" -f abstractfactory.puml
+   ```
+
+2. Grab the output and feed it to a downloaded [PlantUML release](https://github.com/plantuml/plantuml/releases/) to generate a PNG image:
+   ```
+   java -jar plantuml-1.2022.0.jar abstractfactory.puml 
+   ```
+
+# Options
+
+Here is the full list of **yajauml** options:
+```
+usage: java -jar yetanother-java2uml.jar
+ -d <directory>    directory to search for .java files
+ -f,--file <arg>   write to file
+ -i <ignore>       comma separated list of ignored types
+ -s <presenter>    presenter format to be used: plantuml, graphviz or mermaid
 ```
 
-- `packages` configuration parameter contains a list of packages that should be included in the class
-diagram 
-- `ignores` configuration parameter contains a list of types that should be excluded from the class
-diagram
-- `Dependencies` list should contain the artifacts where the classes are found. See https://maven.apache.org/guides/mini/guide-configuring-plugins.html#Using_the_dependencies_Tag
-- `includeMainDirectory` configuration parameter indicates to include classes of src/main/java 
-directory. Default value of `includeMainDirectory` is true. 
-- `includeTestDirectory` configuration parameter indicates to include classes of src/test/java 
-directory. Default value of `includeTestDirectory` configuration parameter is false.
-- `presenter` parameter control which presenter is used. Can be `graphviz`, `plantuml` or `mermaid`.
 
-When `process-classes` life-cycle phase gets executed, the class diagram will be saved to the location specified by `outputDirectory` parameter. If not specified the file is saved
-to `/target/${project.name}.urm.dot` or `/target/${project.name}.urm.puml`. Use this file with your local
-or online tools to show your class diagram.
 
-### Showcases
 
-Here are some class diagrams generated with the `urm-maven-plugin`.
 
-![Graphviz example](examples/graphviz-example.png "Graphviz example")
-![PlantUML example](examples/plantuml-example.png "PlantUML example")
-![Mermaid example](examples/mermaid-example.png "Mermaid example")
+# Examples
 
-### Deploy Instructions
+Here are some class diagrams generated with **yajauml**:
 
-[Performing a Release Deployment](http://central.sonatype.org/pages/apache-maven.html#performing-a-release-deployment)
+## PlantUML
 
+
+![PlantUML example](examples/plantuml-abstractfactory.png "PlantUML example")
+
+
+Do it yourself!
+
+Step 1: **yajauml**
 ```
-mvn clean deploy -P release
+java -jar yajauml/build/libs/yajauml.jar -d "yajauml/src/test/java/yajauml/testdomain/abstractfactory" -f examples/abstractfactory.puml
+```
+Step 2: PlantUML
+```
+cat examples/abstractfactory.puml | java -jar plantuml-1.2022.0.jar -pipe > examples/plantuml-abstractfactory.png
 ```
 
-### Release notes
+Alternatives to Step 2: 
+You don't have downloaded PlantUML? No problem! You can paste the contents of `abstractfactory.puml` into PlantUML online server (http://www.plantuml.com/plantuml/) or PlantText UML Editor (https://www.planttext.com/).
 
-- 2.0.0
-    - Add support for Mermaid presenter [#39](https://github.com/iluwatar/uml-reverse-mapper/pull/39)
-    - Update to Java 11 [#42](https://github.com/iluwatar/uml-reverse-mapper/issues/42) and [#56](https://github.com/iluwatar/uml-reverse-mapper/pull/56)
 
-- 1.4.8
-    - Update dependencies to latest versions [#21](https://github.com/iluwatar/uml-reverse-mapper/issues/21)
-    - Work on Java 11 compatibility [#18](https://github.com/iluwatar/uml-reverse-mapper/issues/18)
-    - Create directories for the output file, if they don't exist
 
-- 1.4.7
-    - Update README.md instruction [#20](https://github.com/iluwatar/uml-reverse-mapper/issues/20)
-    - Presenter can not be chosen via command line parameter [#22](https://github.com/iluwatar/uml-reverse-mapper/issues/22)
-    - Presenter can not be chosen via plugin parameters [#23](https://github.com/iluwatar/uml-reverse-mapper/issues/23)
+
+
+## Graphviz
+
+![Graphviz example](examples/graphviz-abstractfactory.png "Graphviz example")
+
+Wanna do it yourself?
+
+Step 1: **yajauml**
+```
+java -jar yajauml/build/libs/yajauml.jar -d "yajauml/src/test/java/yajauml/testdomain/abstractfactory" -s graphviz -f examples/abstractfactory.dot
+```
+
+Step 2: Graphviz (dot)
+```
+dot -Tpng examples/abstractfactory.dot > examples/graphviz-abstractfactory.png
+```
+
+Alternatives to step 2: There are many interactive viewers listed in https://graphviz.org/resources/. You just have to chose a cloud-based editor like Graphviz Online (https://dreampuf.github.io/GraphvizOnline) or Edotor (https://edotor.net/) and paste the contents of `abstractfactory.dot` into it.
+
+
+
+
+
+## Mermaid
+
+![Mermaid example](examples/mermaid-abstractfactory.png "Mermaid example")
+
+
+Let's to it!
+
+Step 1: **yajauml**
+```
+java -jar yajauml/build/libs/yajauml.jar -d "yajauml/src/test/java/yajauml/testdomain/abstractfactory" -s mermaid -f examples/abstractfactory.mmd
+```
+
+Step 2: Mermaid
+
+Paste the contents of `abstractfactory.mmd` into the Mermaid Live Editor at https://mermaid.live.
+
+
+
+Alternatives to Step 2: Mermaid.js is also available as an API and integrates with other tools, as described in this [documentation](https://mermaid-js.github.io/mermaid/#/n00b-gettingStarted?id=four-ways-of-using-mermaid).
+
+
+
+
+
+
+
+
+# Known limitations
+
+- UML class diagram relationships: **yajauml** identify class relationshipts as either inheritance, implementation or a "loose" form of association (which comprises nested classes), without distinguishing between aggregation or composition. Besides, **yajauml** does not deal with cardinality/multiplicity or other qualifiers.
+
+- As with [UML Reverse Mapper](https://github.com/iluwatar/uml-reverse-mapper), diagrams generated with **yajauml** may slightly differ when representing relationships in PlantUML, Graphviz or Mermaid, because some arrow types/lines differ in these formats.
+
+- Nested classes, static or abstract classes are identified, but their representation is more detailed in PlantUML format. Besides, in Graphviz format, there is no visual ditinction between classes, interfaces or abstract classes.
+
+- Testing: so far, we've only done manual testing with a few projects containing an "assortment" of Java code. It may be possible to reuse some test cases from uml-reverse-mapper to implement automated tests. 
+
+<!-- # Comparing related tools -->

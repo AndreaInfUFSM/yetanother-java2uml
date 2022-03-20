@@ -1,0 +1,85 @@
+@startuml
+package com.iluwatar.abstractfactory {
+  class OrcKingdomFactory {
+    + createCastle() : Castle
+    + createKing() : King
+    + createArmy() : Army
+  }
+  class OrcArmy {
+    ~ DESCRIPTION : String {static}
+    + getDescription() : String
+  }
+  class ElfCastle {
+    ~ DESCRIPTION : String {static}
+    + getDescription() : String
+  }
+  class ElfKing {
+    ~ DESCRIPTION : String {static}
+    + getDescription() : String
+  }
+  interface KingdomFactory {
+    ~ createCastle() : Castle
+    ~ createKing() : King
+    ~ createArmy() : Army
+  }
+  interface King {
+    ~ getDescription() : String
+  }
+  class App {
+    - kingdom : Kingdom
+    + getKingdom() : Kingdom
+    + main(String[] args) : void {static}
+    + run() : void
+    + createKingdom(final Kingdom.FactoryMaker.KingdomType kingdomType) : void
+  }
+  interface Castle {
+    ~ getDescription() : String
+  }
+  interface Army {
+    ~ getDescription() : String
+  }
+  class ElfArmy {
+    ~ DESCRIPTION : String {static}
+    + getDescription() : String
+  }
+  class ElfKingdomFactory {
+    + createCastle() : Castle
+    + createKing() : King
+    + createArmy() : Army
+  }
+  class Kingdom {
+    - king : King
+    - castle : Castle
+    - army : Army
+  }
+  class FactoryMaker {
+    + makeFactory(KingdomType type) : KingdomFactory {static}
+  }
+  enum KingdomType {
+    + ELF {static}
+    + ORC {static}
+  }
+  class OrcKing {
+    ~ DESCRIPTION : String {static}
+    + getDescription() : String
+  }
+  class OrcCastle {
+    ~ DESCRIPTION : String {static}
+    + getDescription() : String
+  }
+}
+App --> Kingdom
+KingdomType --+ FactoryMaker
+FactoryMaker --+ Kingdom
+Kingdom --> King
+Kingdom --> Castle
+Kingdom --> Army
+ElfArmy ..|> Army 
+ElfKing ..|> King 
+ElfKingdomFactory ..|> KingdomFactory 
+OrcKingdomFactory ..|> KingdomFactory 
+OrcCastle ..|> Castle 
+ElfCastle ..|> Castle 
+OrcArmy ..|> Army 
+OrcKing ..|> King 
+@enduml

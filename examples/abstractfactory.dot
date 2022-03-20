@@ -1,0 +1,37 @@
+digraph domain {
+  edge [ fontsize = 11 ];
+  node [ shape=record ];
+  subgraph cluster_0 {
+    label = "com.iluwatar.abstractfactory";
+    OrcKingdomFactory [ label = "{OrcKingdomFactory |  | + createCastle() : Castle\l+ createKing() : King\l+ createArmy() : Army\l}" ] 
+    OrcArmy [ label = "{OrcArmy | ~ DESCRIPTION : String\l | + getDescription() : String\l}" ] 
+    ElfCastle [ label = "{ElfCastle | ~ DESCRIPTION : String\l | + getDescription() : String\l}" ] 
+    ElfKing [ label = "{ElfKing | ~ DESCRIPTION : String\l | + getDescription() : String\l}" ] 
+    KingdomFactory [ label = "{KingdomFactory |  | ~ createCastle() : Castle\l~ createKing() : King\l~ createArmy() : Army\l}" ] 
+    King [ label = "{King |  | ~ getDescription() : String\l}" ] 
+    App [ label = "{App | - kingdom : Kingdom\l | + getKingdom() : Kingdom\l+ main(String[] args) : void\l+ run() : void\l+ createKingdom(final Kingdom.FactoryMaker.KingdomType kingdomType) : void\l}" ] 
+    Castle [ label = "{Castle |  | ~ getDescription() : String\l}" ] 
+    Army [ label = "{Army |  | ~ getDescription() : String\l}" ] 
+    ElfArmy [ label = "{ElfArmy | ~ DESCRIPTION : String\l | + getDescription() : String\l}" ] 
+    ElfKingdomFactory [ label = "{ElfKingdomFactory |  | + createCastle() : Castle\l+ createKing() : King\l+ createArmy() : Army\l}" ] 
+    Kingdom [ label = "{Kingdom | - king : King\l- castle : Castle\l- army : Army\l | }" ] 
+    FactoryMaker [ label = "{FactoryMaker |  | + makeFactory(KingdomType type) : KingdomFactory\l}" ] 
+    KingdomType [ label = "{KingdomType | + ELF\l+ ORC\l | }" ] 
+    OrcKing [ label = "{OrcKing | ~ DESCRIPTION : String\l | + getDescription() : String\l}" ] 
+    OrcCastle [ label = "{OrcCastle | ~ DESCRIPTION : String\l | + getDescription() : String\l}" ] 
+  }
+  App -> Kingdom [ dir=forward arrowhead=normal arrowtail=none color=slategray];
+  KingdomType -> FactoryMaker [ dir=forward arrowhead=odot arrowtail=none color=slategray];
+  FactoryMaker -> Kingdom [ dir=forward arrowhead=odot arrowtail=none color=slategray];
+  Kingdom -> King [ dir=forward arrowhead=normal arrowtail=none color=slategray];
+  Kingdom -> Castle [ dir=forward arrowhead=normal arrowtail=none color=slategray];
+  Kingdom -> Army [ dir=forward arrowhead=normal arrowtail=none color=slategray];
+  ElfArmy -> Army [arrowhead=empty style=dashed color=slategray style=dashed];
+  ElfKing -> King [arrowhead=empty style=dashed color=slategray style=dashed];
+  ElfKingdomFactory -> KingdomFactory [arrowhead=empty style=dashed color=slategray style=dashed];
+  OrcKingdomFactory -> KingdomFactory [arrowhead=empty style=dashed color=slategray style=dashed];
+  OrcCastle -> Castle [arrowhead=empty style=dashed color=slategray style=dashed];
+  ElfCastle -> Castle [arrowhead=empty style=dashed color=slategray style=dashed];
+  OrcArmy -> Army [arrowhead=empty style=dashed color=slategray style=dashed];
+  OrcKing -> King [arrowhead=empty style=dashed color=slategray style=dashed];
+}

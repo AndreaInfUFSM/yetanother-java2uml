@@ -1,8 +1,5 @@
 /build/
 /bin/
-target/
-
-.DS_Store
 
 *.class
 .classpath
@@ -18,8 +15,5 @@ target/
 *.iml
 *.iws
 
-# shade-plugin ignore extra pom file
-drm-core/dependency-reduced-pom.xml
-/.metadata/
-urm-core/.settings/
-urm-maven/.settings/
+.vscode
+

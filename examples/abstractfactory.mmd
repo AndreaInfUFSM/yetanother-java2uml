@@ -1,0 +1,98 @@
+classDiagram
+  class OrcKingdomFactory {
+
+    + createCastle() : Castle
+    + createKing() : King
+    + createArmy() : Army
+  }
+  class OrcArmy {
+
+    ~ DESCRIPTION : String$  
+    + getDescription() : String
+  }
+  class ElfCastle {
+
+    ~ DESCRIPTION : String$  
+    + getDescription() : String
+  }
+  class ElfKing {
+
+    ~ DESCRIPTION : String$  
+    + getDescription() : String
+  }
+  class KingdomFactory {
+<<interface>>
+    ~ createCastle() : Castle
+    ~ createKing() : King
+    ~ createArmy() : Army
+  }
+  class King {
+<<interface>>
+    ~ getDescription() : String
+  }
+  class App {
+
+    - kingdom : Kingdom
+    + getKingdom() : Kingdom
+    + main(String[] args) : void$ 
+    + run() : void
+    + createKingdom(final Kingdom.FactoryMaker.KingdomType kingdomType) : void
+  }
+  class Castle {
+<<interface>>
+    ~ getDescription() : String
+  }
+  class Army {
+<<interface>>
+    ~ getDescription() : String
+  }
+  class ElfArmy {
+
+    ~ DESCRIPTION : String$  
+    + getDescription() : String
+  }
+  class ElfKingdomFactory {
+
+    + createCastle() : Castle
+    + createKing() : King
+    + createArmy() : Army
+  }
+  class Kingdom {
+
+    - king : King
+    - castle : Castle
+    - army : Army
+  }
+  class FactoryMaker {
+
+    + makeFactory(KingdomType type) : KingdomFactory$ 
+  }
+  class KingdomType {
+<<enumeration>>
+    + ELF$  
+    + ORC$  
+  }
+  class OrcKing {
+
+    ~ DESCRIPTION : String$  
+    + getDescription() : String
+  }
+  class OrcCastle {
+
+    ~ DESCRIPTION : String$  
+    + getDescription() : String
+  }
+App --> Kingdom
+KingdomType --> FactoryMaker
+FactoryMaker --> Kingdom
+ElfArmy --> Army
+ElfKing --> King
+ElfKingdomFactory --> KingdomFactory
+OrcKingdomFactory --> KingdomFactory
+Kingdom --> King
+Kingdom --> Castle
+Kingdom --> Army
+OrcCastle --> Castle
+ElfCastle --> Castle
+OrcArmy --> Army
+OrcKing --> King
