@@ -136,7 +136,7 @@ Alternatives to Step 2: Mermaid.js is also available as an API and integrates wi
 
 - As with [UML Reverse Mapper](https://github.com/iluwatar/uml-reverse-mapper), diagrams generated with **yajauml** may slightly differ when representing relationships in PlantUML, Graphviz or Mermaid, because some arrow types/lines differ in these formats.
 
-- Nested classes, static or abstract classes are identified, but their representation is more detailed in PlantUML format. Besides, in Graphviz format, there is no visual ditinction between classes, interfaces or abstract classes.
+- Nested classes, static or abstract classes are identified, but their representation is more detailed in PlantUML format. Besides, in Graphviz format, there is no visual distinction between classes, interfaces or abstract classes.
 
 - Testing: so far, we've only done manual testing with a few projects containing an "assortment" of Java code. It may be possible to reuse some test cases from uml-reverse-mapper to implement automated tests. 
 
